@@ -14,7 +14,7 @@ namespace Ticketer
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                // .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
@@ -27,8 +27,7 @@ namespace Ticketer
         {
             // Add framework services.
             services.AddMvc();
-            services.AddDbContext<TicketerDbContext>(options => options.UseSqlServer("G"));
-            // services.AddDbContext<TicketerDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DbConnection")));
+            services.AddDbContext<TicketerDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DbConnection")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
