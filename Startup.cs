@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -31,7 +27,8 @@ namespace Ticketer
         {
             // Add framework services.
             services.AddMvc();
-            services.AddDbContext<TicketerDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DbConnection")));
+            services.AddDbContext<TicketerDbContext>(options => options.UseSqlServer("G"));
+            // services.AddDbContext<TicketerDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DbConnection")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

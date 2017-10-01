@@ -19,5 +19,11 @@ namespace Ticketer.Controllers
             context.Tickets.Add(ticket);
             context.SaveChanges();
         }
+
+        [HttpGet]
+        public string Get()
+        {
+            return "TEST";
+        }
     }
 }
