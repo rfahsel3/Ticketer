@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.AspNetCore.Mvc;
 using Ticketer.Models;
+using System.Linq;
 
 namespace Ticketer.Controllers
 {
@@ -13,17 +14,14 @@ namespace Ticketer.Controllers
         }
 
         [HttpPost]
-        public void Post(SlackRequest slackRequest)
+        public string Post(SlackRequest slackRequest)
         {
-            var ticket = new Ticket(slackRequest.text, DateTime.UtcNow);
+            string personGettingTicket = slackRequest.text.Trim();
+            var ticket = new Ticket(slackRequest.text, DateTime.UtcNow, slackRequest.team_id);
             context.Tickets.Add(ticket);
             context.SaveChanges();
-        }
-
-        [HttpGet]
-        public string Get()
-        {
-            return "TEST";
+            int totalTicketsForPerson = context.Tickets.Where(p => string.Equals(p.Name, personGettingTicket, StringComparison.OrdinalIgnoreCase)).Count();
+            return $"Thanks! They now have {totalTicketsForPerson} tickets";
         }
     }
 }

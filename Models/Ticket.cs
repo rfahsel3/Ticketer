@@ -7,10 +7,12 @@ namespace Ticketer.Models
         public long ID {get;set;}
         public string Name {get; set;}
         public DateTime CreatedAt {get; set;}
-        public Ticket(string name, DateTime createdAt) 
+        public string TeamId { get; set; }
+        public Ticket(string name, DateTime createdAt, string teamId) 
         {
             this.Name = name;
             this.CreatedAt = createdAt;
+            this.TeamId = teamId;
         }
 
         public Ticket() {}

@@ -8,9 +8,10 @@ using Ticketer.Models;
 namespace Ticketer.Migrations
 {
     [DbContext(typeof(TicketerDbContext))]
-    partial class TicketerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20171001044818_AddGroupIdColumn")]
+    partial class AddGroupIdColumn
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.2")
