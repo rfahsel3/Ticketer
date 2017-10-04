@@ -34,6 +34,7 @@ namespace Ticketer
             // Add framework services.
             services.AddMvc();
             services.AddDbContext<TicketerDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DbConnection")));
+            services.AddSingleton<IConfiguration>(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
