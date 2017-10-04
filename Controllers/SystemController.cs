@@ -27,5 +27,10 @@ namespace Ticketer.Controllers
                 await client.PostAsync("https://slack.com/api/oauth.access", new FormUrlEncodedContent(kvs));
             }
         }
+
+        [HttpGet]
+        public string IsUp() {
+            return "UP";
+        }
     }
 }
