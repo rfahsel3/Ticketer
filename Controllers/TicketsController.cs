@@ -3,9 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 using Ticketer.Models;
 using System.Linq;
 using System.Collections.Generic;
+using Ticketer.Filters;
 
 namespace Ticketer.Controllers
 {
+    [ServiceFilter(typeof(SlackActionFilter))]
     [Route("api/[controller]/[action]")]
     public class TicketsController : Controller
     {

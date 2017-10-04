@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Ticketer.Models;
 using Microsoft.EntityFrameworkCore;
+using Ticketer.Filters;
 
 namespace Ticketer
 {
@@ -35,6 +36,7 @@ namespace Ticketer
             services.AddMvc();
             services.AddDbContext<TicketerDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DbConnection")));
             services.AddSingleton<IConfiguration>(Configuration);
+            services.AddSingleton<SlackActionFilter>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
