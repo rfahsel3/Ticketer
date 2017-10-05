@@ -20,7 +20,7 @@ namespace Ticketer.Controllers
         }
 
         [HttpPost]
-        public string SlackAction([FromBody] SlackActionRequest request) {
+        public string SlackAction(SlackActionRequest request) {
             SlackAction action = request.actions.First();
             string actionName = action.name;
 
