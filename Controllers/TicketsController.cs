@@ -7,7 +7,7 @@ using Ticketer.Filters;
 
 namespace Ticketer.Controllers
 {
-    [ServiceFilter(typeof(SlackActionFilter))]
+    // [ServiceFilter(typeof(SlackActionFilter))]
     [Route("api/[controller]/[action]")]
     public class TicketsController : Controller
     {
@@ -17,25 +17,15 @@ namespace Ticketer.Controllers
         }
 
         [HttpPost]
-        public string Create(SlackRequest slackRequest)
+        public ActionResult Create(SlackRequest slackRequest)
         {
             string personGettingTicket = slackRequest.text.Trim();
             var ticket = new Ticket(slackRequest.text, DateTime.UtcNow, slackRequest.team_id);
             context.Tickets.Add(ticket);
             context.SaveChanges();
             int totalTicketsForPerson = context.Tickets.Where(p => string.Equals(p.Name, personGettingTicket, StringComparison.OrdinalIgnoreCase)).Count();
-            return $"Thanks! They now have {totalTicketsForPerson} tickets. If you want to revoke the ticket, click here to <http://ticketer.ryanfahsel.com/api/tickets/revoke?id={ticket.ID}|revoke>";
-        }
-
-        [HttpGet]
-        public string Revoke(int id) {
-            Ticket ticketToDelete = context.Tickets.FirstOrDefault(t => t.ID == id);
-            if (ticketToDelete == null) {
-                return "Oops, I cannot find that ticket.";
-            }
-            context.Tickets.Remove(ticketToDelete);
-            context.SaveChanges();
-            return $"Deleted... Like taking candy from a high schooler...";
+            var messageResponse = BuildCreateTicketMessageResponse(personGettingTicket, totalTicketsForPerson, ticket.ID);
+            return Json(messageResponse);
         }
 
         [HttpPost]
@@ -78,6 +68,25 @@ namespace Ticketer.Controllers
             Ticket winningTicket = ticketsAfterDate.ElementAt(rand.Next(ticketsAfterDate.Count()));
 
             return $"{winningTicket.Name} won!";
+        }
+
+        private MessageResponse BuildCreateTicketMessageResponse(string name, int count, long ticketId) {
+            var mr = new MessageResponse();
+            mr.text = $"I'm sure {name} appreciates the ticket! They have {count} now! If it was an accident you can revoke the ticket below!";
+            var attachment = new Attachment();
+            attachment.color = "#3AA3A3";
+            attachment.attachment_type = "default";
+            attachment.fallback = "Cannot revoke ticket at this time";
+            var action = new SlackAction();
+            action.name = "revoke";
+            action.text = "Revoke";
+            action.value = ticketId.ToString();
+            action.type = "button";
+            var actionsList = new List<SlackAction>() {action};
+            attachment.actions = actionsList;
+            var attachmentsList = new List<Attachment>() {attachment};
+            mr.attachments = attachmentsList;
+            return mr;
         }
     }
 }
