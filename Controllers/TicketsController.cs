@@ -77,6 +77,7 @@ namespace Ticketer.Controllers
             attachment.color = "#3AA3A3";
             attachment.attachment_type = "default";
             attachment.fallback = "Cannot revoke ticket at this time";
+            attachment.callback_id = Guid.NewGuid().ToString();
             var action = new SlackAction();
             action.name = "revoke";
             action.text = "Revoke";
