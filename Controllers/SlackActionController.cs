@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 
 namespace Ticketer.Controllers
 {
@@ -20,8 +21,9 @@ namespace Ticketer.Controllers
         }
 
         [HttpPost]
-        public string SlackAction(SlackActionRequest request) {
-            SlackAction action = request.actions.First();
+        public string SlackAction(string payload) {
+            SlackActionRequest actionRequest = JsonConvert.DeserializeObject<SlackActionRequest>(payload);
+            SlackAction action = actionRequest.actions.First();
             string actionName = action.name;
 
             switch (actionName) {
