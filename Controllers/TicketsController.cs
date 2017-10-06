@@ -4,10 +4,11 @@ using Ticketer.Models;
 using System.Linq;
 using System.Collections.Generic;
 using Ticketer.Filters;
+using Microsoft.ApplicationInsights;
 
 namespace Ticketer.Controllers
 {
-    // [ServiceFilter(typeof(SlackActionFilter))]
+    [ServiceFilter(typeof(SlackActionFilter))]
     [Route("api/[controller]/[action]")]
     public class TicketsController : Controller
     {
@@ -59,13 +60,15 @@ namespace Ticketer.Controllers
                 return $"The date {month}/{day}/{year} is invalid. {ex.Message}";
             }
 
-            IEnumerable<Ticket> ticketsAfterDate = context.Tickets.Where(t => t.CreatedAt > dt);
-            if (!ticketsAfterDate.Any()) {
+            IEnumerable<Ticket> ticketsAfterDateForTeam = context.Tickets.Where(t => t.CreatedAt > dt 
+                && t.TeamId == slackRequest.team_id);
+
+            if (!ticketsAfterDateForTeam.Any()) {
                 return $"There are no tickets after the date {dt.ToString()}";
             }
 
             Random rand = new Random();
-            Ticket winningTicket = ticketsAfterDate.ElementAt(rand.Next(ticketsAfterDate.Count()));
+            Ticket winningTicket = ticketsAfterDateForTeam.ElementAt(rand.Next(ticketsAfterDateForTeam.Count()));
 
             return $"{winningTicket.Name} won!";
         }

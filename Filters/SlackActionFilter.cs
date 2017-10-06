@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.Controllers;
 using Ticketer.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 
 namespace Ticketer.Filters {
     public class SlackActionFilter : ActionFilterAttribute {
@@ -20,6 +21,13 @@ namespace Ticketer.Filters {
             bool success = false;
             if (context.ActionArguments.Keys.Contains("slackRequest")) {
                 SlackRequest sr = context.ActionArguments["slackRequest"] as SlackRequest;
+                if (sr.token == config.GetValue<string>("SlackVerificationToken")) {
+                    success = true;
+                }
+            }
+
+            if (context.ActionArguments.Keys.Contains("payload")) {
+                SlackActionRequest sr = JsonConvert.DeserializeObject<SlackActionRequest>(context.ActionArguments["payload"] as string);
                 if (sr.token == config.GetValue<string>("SlackVerificationToken")) {
                     success = true;
                 }

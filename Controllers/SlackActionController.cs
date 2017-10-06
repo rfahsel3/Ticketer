@@ -7,9 +7,11 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
+using Ticketer.Filters;
 
 namespace Ticketer.Controllers
 {
+    [ServiceFilter(typeof(SlackActionFilter))]
     [Route("api/action")]
     public class SlackActionController : Controller
     {

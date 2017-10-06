@@ -10,7 +10,7 @@ namespace Ticketer.Models {
         // public string action_ts {get; set;}
         // public string message_ts {get; set;}
         // public string attachment_id {get; set;}
-        // public string token {get; set;}
+        public string token {get; set;}
         // //original_message can be implemented if needed
         // public string response_url {get; set;}
     }
